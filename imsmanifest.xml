@@ -27,12 +27,19 @@
       <file href="brand/fonts/SourceSans3[wght].ttf"/>
       <file href="brand/jam-training-primary.png"/>
       <file href="brand/jam-training-white.png"/>
+      <file href="captions/smp152-v01-hook.ar.vtt"/>
       <file href="captions/smp152-v01-hook.en.vtt"/>
+      <file href="captions/smp152-v02-scene1-poor.ar.vtt"/>
       <file href="captions/smp152-v02-scene1-poor.en.vtt"/>
+      <file href="captions/smp152-v03-scene1-good.ar.vtt"/>
       <file href="captions/smp152-v03-scene1-good.en.vtt"/>
+      <file href="captions/smp152-v05-scene2-good.ar.vtt"/>
       <file href="captions/smp152-v05-scene2-good.en.vtt"/>
+      <file href="captions/smp152-v06-scene3-poor.ar.vtt"/>
       <file href="captions/smp152-v06-scene3-poor.en.vtt"/>
+      <file href="captions/smp152-v07-scene3-good.ar.vtt"/>
       <file href="captions/smp152-v07-scene3-good.en.vtt"/>
+      <file href="captions/smp152-v08-story-start.ar.vtt"/>
       <file href="captions/smp152-v08-story-start.en.vtt"/>
       <file href="fonts/CREDITS.txt"/>
       <file href="fonts/TwemojiCountryFlags.woff2"/>
@@ -75,6 +82,7 @@
       <file href="images/cast/F-04.jpg"/>
       <file href="images/cast/F-09.jpg"/>
       <file href="images/smp152-c1b.jpg"/>
+      <file href="images/smp152-c1c-scooter.jpg"/>
       <file href="images/smp152-c1c.jpg"/>
       <file href="images/smp152-c2a.jpg"/>
       <file href="images/smp152-c2b.jpg"/>
@@ -94,6 +102,7 @@
       <file href="images/smp152-f-story-start.jpg"/>
       <file href="images/smp152-hero.jpg"/>
       <file href="images/smp152-k-half-time.jpg"/>
+      <file href="images/smp152-m-map.jpg"/>
       <file href="images/smp152-s01-info-point.jpg"/>
       <file href="images/smp152-s02-bag-alone.jpg"/>
       <file href="images/smp152-s03-ris-point.jpg"/>
