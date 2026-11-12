@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+  <!-- Baby stroller, drawn in the Fluent Emoji 3D style (soft gradients, glossy highlights). Custom for this library: no stroller emoji exists. -->
+  <defs>
+    <radialGradient id="hood" cx="35%" cy="30%" r="80%">
+      <stop offset="0" stop-color="#8fb8ff"/><stop offset=".55" stop-color="#3f7ae6"/><stop offset="1" stop-color="#2149a8"/>
+    </radialGradient>
+    <linearGradient id="body" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#6fa0ff"/><stop offset=".6" stop-color="#3a6ed8"/><stop offset="1" stop-color="#2450b4"/>
+    </linearGradient>
+    <linearGradient id="trim" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff4d6"/><stop offset="1" stop-color="#f2c96b"/>
+    </linearGradient>
+    <radialGradient id="tyre" cx="40%" cy="35%" r="70%">
+      <stop offset="0" stop-color="#6b6f7a"/><stop offset=".6" stop-color="#34363d"/><stop offset="1" stop-color="#1c1d22"/>
+    </radialGradient>
+    <radialGradient id="hub" cx="40%" cy="35%" r="70%">
+      <stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#b9c0cc"/>
+    </radialGradient>
+    <linearGradient id="bar" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#d9dde5"/><stop offset="1" stop-color="#8a909c"/>
+    </linearGradient>
+  </defs>
+  <!-- handle -->
+  <path d="M170 128 L206 58" stroke="url(#bar)" stroke-width="11" stroke-linecap="round" fill="none"/>
+  <rect x="192" y="44" width="34" height="18" rx="9" transform="rotate(-25 209 53)" fill="#3a3d46"/>
+  <!-- frame legs -->
+  <path d="M84 168 L66 206 M168 168 L190 206" stroke="url(#bar)" stroke-width="9" stroke-linecap="round"/>
+  <!-- basket body -->
+  <path d="M40 118 H200 Q204 170 152 178 H96 Q44 176 40 118 Z" fill="url(#body)"/>
+  <path d="M40 118 H200" stroke="url(#trim)" stroke-width="10" stroke-linecap="round"/>
+  <path d="M58 132 Q120 150 186 132" stroke="#ffffff" stroke-opacity=".35" stroke-width="6" fill="none" stroke-linecap="round"/>
+  <!-- hood (canopy) -->
+  <path d="M40 118 A72 72 0 0 1 120 46 L120 118 Z" fill="url(#hood)"/>
+  <path d="M64 70 A60 60 0 0 1 112 52" stroke="#ffffff" stroke-opacity=".55" stroke-width="7" fill="none" stroke-linecap="round"/>
+  <path d="M120 46 L120 118" stroke="#2149a8" stroke-width="4"/>
+  <path d="M58 90 L120 118 M82 60 L120 118" stroke="#2a58c2" stroke-width="3" stroke-opacity=".7"/>
+  <!-- wheels -->
+  <circle cx="66" cy="210" r="26" fill="url(#tyre)"/><circle cx="66" cy="210" r="10" fill="url(#hub)"/>
+  <circle cx="190" cy="210" r="26" fill="url(#tyre)"/><circle cx="190" cy="210" r="10" fill="url(#hub)"/>
+  <path d="M50 196 A20 20 0 0 1 70 188" stroke="#ffffff" stroke-opacity=".35" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <path d="M174 196 A20 20 0 0 1 194 188" stroke="#ffffff" stroke-opacity=".35" stroke-width="4" fill="none" stroke-linecap="round"/>
+</svg>

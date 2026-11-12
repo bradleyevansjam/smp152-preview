@@ -1,0 +1,108 @@
+<!doctype html><html><head><meta charset="utf-8"><title>SCORM 1.2 test harness</title>
+<style>body{font-family:Consolas,monospace;background:#111;color:#ddd;margin:0;padding:14px}
+h1{font-size:16px;color:#7fd0ff}#log div{padding:2px 0}.pass{color:#4dc9b9}.fail{color:#ff6d5a}
+iframe{width:100%;height:420px;border:1px solid #333;background:#fff;margin-top:10px}</style></head><body>
+<h1>SCORM 1.2 harness — launch / bookmark / suspend / resume / navigation / score</h1>
+<div id="log"></div>
+<div id="slot"></div>
+<script>
+// Generic: works for any Course Kit module. Reads the module's own config via the ?qa=1 hook.
+// ---------- fake LMS ----------
+var cmi={ "cmi.core.lesson_status":"not attempted","cmi.core.lesson_location":"",
+  "cmi.suspend_data":"","cmi.core.entry":"ab-initio","cmi.core.exit":"",
+  "cmi.core.score.raw":"","cmi.core.score.min":"","cmi.core.score.max":"" };
+var calls=[];
+window.API={
+  LMSInitialize:function(){calls.push("Initialize");return "true";},
+  LMSFinish:function(){calls.push("Finish");return "true";},
+  LMSGetValue:function(k){return (k in cmi)?cmi[k]:"";},
+  LMSSetValue:function(k,v){calls.push("Set "+k+"="+String(v).slice(0,40));cmi[k]=String(v);return "true";},
+  LMSCommit:function(){calls.push("Commit");return "true";},
+  LMSGetLastError:function(){return "0";},
+  LMSGetErrorString:function(){return "";},
+  LMSGetDiagnostic:function(){return "";}
+};
+// ---------- helpers ----------
+var results=[];window.__RESULTS=results;window.__DONE=false;
+function log(ok,msg){results.push((ok?"PASS":"FAIL")+" — "+msg);
+  var d=document.createElement("div");d.className=ok?"pass":"fail";d.textContent=(ok?"✔ ":"✘ ")+msg;
+  document.getElementById("log").appendChild(d);}
+function sleep(ms){return new Promise(function(r){setTimeout(r,ms);});}
+var ifr=null,errors=[];
+function launch(){return new Promise(function(res){
+  ifr=document.createElement("iframe");
+  ifr.src="index.html?qa=1";
+  ifr.onload=function(){ifr.contentWindow.addEventListener("error",function(e){errors.push(e.message);});setTimeout(res,1500);};
+  document.getElementById("slot").appendChild(ifr);
+});}
+function kill(){ if(ifr){try{ifr.contentWindow.SCORM.finish(true);}catch(e){} ifr.remove();ifr=null;} }
+// ---------- test sequence ----------
+(async function(){
+  try{
+    // 1. first launch
+    await launch();
+    var W=ifr.contentWindow, Q=W.QA;
+    log(calls.indexOf("Initialize")>=0,"LMSInitialize called on launch");
+    log(cmi["cmi.core.lesson_status"]==="incomplete","lesson_status set to incomplete on first launch");
+    log(typeof Q!=="undefined","QA hook armed inside SCO (?qa=1 survived)");
+    var C=Q.course, ids=Q.ids(), N=C.sections.length;
+    log(ids.length>0&&ids.length===new Set(ids).size,"screen ids are unique ("+ids.length+" screens)");
+    // 2. finish section 1: open its last screen (the section-close screen)
+    // first taught section that actually has screens (a module may start at section 2)
+    var s1=ids.map(function(id){return Q.sec(id);}).filter(function(n){return n>=1&&n<=N;})[0]||1;
+    var sec1=ids.filter(function(id){return Q.sec(id)===s1;});
+    var closeId=sec1[sec1.length-1];
+    for(var si=0;si<sec1.length-1;si++){Q.go(sec1[si]);await sleep(60);}   /* a lesson is ticked only when every screen of it was reached (2026-10-12): walk them first, as a learner does */
+    Q.go(closeId); await sleep(700);
+    log(cmi["cmi.core.lesson_location"]===closeId,"bookmark saved (lesson_location="+closeId+")");
+    var sd={}; try{sd=JSON.parse(cmi["cmi.suspend_data"]);}catch(e){}
+    log((sd.d||[]).indexOf(String(s1))>=0,"suspend_data records section "+s1+" complete");
+    // 3. exit with suspend
+    var before=calls.length; kill(); await sleep(400);
+    log(calls.indexOf("Finish",before)>=0,"LMSFinish called on exit");
+    log(cmi["cmi.core.exit"]==="suspend","cmi.core.exit=suspend on exit");
+    // 4. relaunch → resume
+    cmi["cmi.core.entry"]="resume"; calls.length=0;
+    await launch(); await sleep(600);
+    var W2=ifr.contentWindow, Q2=W2.QA;
+    log(Q2.cur()===closeId,"resumed at bookmark "+closeId+", got: "+Q2.cur());
+    // 5. stepper + free navigation
+    var nodes=W2.document.querySelectorAll(".stepper .node");
+    log(nodes.length===N,"stepper shows "+N+" sections, got "+nodes.length);
+    // pick the last section that already has screens (later sections may not be written yet)
+    var built=C.sections.map(function(s,i){return ids.indexOf(s.start)>=0?i:-1;}).filter(function(i){return i>=0;});
+    if(!built.length){log(false,"no section's start screen is in the course (every start screen hidden?)");throw new Error("stepper has no reachable section");}
+    var li=built[built.length-1], last=nodes[li];
+    log(!!last && !last.disabled,"section "+(li+1)+" is clickable (free navigation)");
+    last.click(); await sleep(600);
+    log(Q2.cur()===C.sections[li].start,"clicking "+(li+1)+" jumps to "+C.sections[li].start+", got: "+Q2.cur());
+    var node1=W2.document.querySelector('.stepper .node[data-n="'+s1+'"]')||W2.document.querySelector(".stepper .node");   /* the node of the section finished above (node 1 may be section 0) */
+    var n1=node1&&(node1.querySelector(".nn")||node1);
+    if(li>0)log(!!n1 && n1.textContent==="✓","restored progress (section 1 shows ✓ once not current)");
+    else log(!!node1,"only section 1 built so far — ✓ check skipped");
+    var sd2={};
+    var sc=C.final&&C.final.scoreScreen;
+    if(sc){
+      // 6. score reporting (empty assessment → 0/100 failed)
+      log(ids.indexOf(sc)>=0,"final.scoreScreen '"+sc+"' exists");
+      Q2.go(sc); await sleep(900);
+      log(cmi["cmi.core.score.raw"]==="0","score.raw reported (0 for empty run), got "+cmi["cmi.core.score.raw"]);
+      log(cmi["cmi.core.score.min"]==="0"&&cmi["cmi.core.score.max"]==="100","score min/max reported");
+      log(cmi["cmi.core.lesson_status"]==="failed","lesson_status=failed below mastery");
+      // 7. suspend data survives a full state save
+      try{sd2=JSON.parse(cmi["cmi.suspend_data"]);}catch(e){}
+      log(sd2.fp===0&&sd2.fpass===false,"final score persisted in suspend_data");
+    }else{
+      log(true,"unscored module (no final.scoreScreen) — score checks skipped");
+      try{sd2=JSON.parse(cmi["cmi.suspend_data"]);}catch(e){}
+    }
+    log(cmi["cmi.suspend_data"].length<4096,"suspend_data under SCORM 1.2 4096-char limit ("+cmi["cmi.suspend_data"].length+" chars)");
+    log(errors.length===0,"no script errors inside the course"+(errors.length?": "+errors.join(" | "):""));
+  }catch(e){ log(false,"harness exception: "+e.message); }
+  window.__DONE=true;
+  var d=document.createElement("div");d.style.marginTop="10px";
+  var fails=results.filter(function(r){return r.indexOf("FAIL")===0;}).length;
+  d.textContent="—— "+results.length+" checks, "+fails+" failures ——";
+  document.getElementById("log").appendChild(d);
+})();
+</script></body></html>

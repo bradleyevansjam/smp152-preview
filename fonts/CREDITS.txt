@@ -1,0 +1,1 @@
+Country flag symbols: Twemoji graphics by Twitter/X (CC-BY 4.0, https://creativecommons.org/licenses/by/4.0/), packaged as a font by the country-flag-emoji-polyfill project (MIT).

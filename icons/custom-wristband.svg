@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+  <!-- Child registration wristband, drawn in the Fluent Emoji 3D style (soft gradients, glossy highlights). Custom: no wristband emoji exists. -->
+  <defs>
+    <linearGradient id="bandBack" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#d9861c"/><stop offset="1" stop-color="#b8650f"/>
+    </linearGradient>
+    <linearGradient id="bandFront" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffd166"/><stop offset=".55" stop-color="#ffb627"/><stop offset="1" stop-color="#f08c00"/>
+    </linearGradient>
+    <linearGradient id="plate" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#dfe6f0"/>
+    </linearGradient>
+    <radialGradient id="snap" cx="40%" cy="35%" r="70%">
+      <stop offset="0" stop-color="#9fd3ff"/><stop offset=".6" stop-color="#3f86d6"/><stop offset="1" stop-color="#2a5ea8"/>
+    </radialGradient>
+  </defs>
+  <!-- back half of the loop -->
+  <ellipse cx="128" cy="128" rx="92" ry="44" fill="none" stroke="url(#bandBack)" stroke-width="26"/>
+  <!-- front half of the loop -->
+  <path d="M36 128 A92 44 0 0 0 220 128" fill="none" stroke="url(#bandFront)" stroke-width="28" stroke-linecap="round"/>
+  <path d="M52 146 A84 34 0 0 0 204 146" fill="none" stroke="#ffffff" stroke-opacity=".45" stroke-width="5" stroke-linecap="round"/>
+  <!-- name plate -->
+  <rect x="88" y="142" width="80" height="44" rx="12" fill="url(#plate)" stroke="#c9d3e0" stroke-width="2"/>
+  <rect x="100" y="155" width="42" height="7" rx="3.5" fill="#b9c4d4"/>
+  <rect x="100" y="168" width="28" height="7" rx="3.5" fill="#cfd8e4"/>
+  <!-- snap -->
+  <circle cx="154" cy="164" r="10" fill="url(#snap)"/>
+  <circle cx="151" cy="160" r="3.5" fill="#ffffff" fill-opacity=".8"/>
+</svg>
