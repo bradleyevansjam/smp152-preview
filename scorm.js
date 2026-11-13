@@ -33,7 +33,7 @@
            LMSGetLastError:function(){return "0";},LMSGetErrorString:function(){return "";},LMSGetDiagnostic:function(){return "";},_local:true};
     }catch(e){api=null;}
   }
-  var connected=false;
+  var connected=false,T0=Date.now();
   window.SCORM={
     present: !!api,
     init: function(){
@@ -53,10 +53,16 @@
     get: function(k){ try{ return connected ? String(api.LMSGetValue(k)) : ""; }catch(e){ return ""; } },
     set: function(k,v){ try{ if(connected) api.LMSSetValue(k,String(v)); }catch(e){} },
     commit: function(){ try{ if(connected) api.LMSCommit(""); }catch(e){} },
+    /* suspend=true: the learner leaves before the end (the LMS keeps the place for next time);
+       suspend=false: Finish on the last screen - a normal exit (""), so the LMS closes the attempt and records the
+       status and score (user, 2026-11-13: 'the finish should report the score to the lms, and close the window').
+       The time spent in this session goes with it (cmi.core.session_time, HHHH:MM:SS). */
     finish: function(suspend){
       if(!connected) return;
       try{
-        if(suspend) api.LMSSetValue("cmi.core.exit","suspend");
+        api.LMSSetValue("cmi.core.exit",suspend?"suspend":"");
+        var sec=Math.max(0,Math.round((Date.now()-T0)/1000)),p=function(n,w){n=String(n);while(n.length<w)n="0"+n;return n;};
+        api.LMSSetValue("cmi.core.session_time",p(Math.floor(sec/3600),4)+":"+p(Math.floor(sec/60)%60,2)+":"+p(sec%60,2));
         api.LMSCommit("");
         api.LMSFinish("");
       }catch(e){}

@@ -12,9 +12,9 @@
   </metadata>
   <organizations default="ORG-1">
     <organization identifier="ORG-1">
-      <title>Info Point, Lost &amp; Found, Restricted Items Storage &amp; children's wristbands</title>
+      <title>Info Point, Lost &amp; Found, Restricted Items Storage &amp; Children's Registration</title>
       <item identifier="ITEM-1" identifierref="RES-1" isvisible="true">
-        <title>Info Point, Lost &amp; Found, Restricted Items Storage &amp; children's wristbands</title>
+        <title>Info Point, Lost &amp; Found, Restricted Items Storage &amp; Children's Registration</title>
         <adlcp:masteryscore>70</adlcp:masteryscore>
       </item>
     </organization>
@@ -22,11 +22,11 @@
   <resources>
     <resource identifier="RES-1" type="webcontent" adlcp:scormtype="sco" href="index.html">
       <file href="index.html"/>
+      <file href="brand/afc-logo-dark-green-800.png"/>
       <file href="brand/afc27-start-picture.jpg"/>
-      <file href="brand/fonts/ArchivoNarrow[wght].ttf"/>
-      <file href="brand/fonts/SourceSans3[wght].ttf"/>
-      <file href="brand/jam-training-primary.png"/>
-      <file href="brand/jam-training-white.png"/>
+      <file href="brand/fonts/Ubuntu-Light.ttf"/>
+      <file href="brand/fonts/Ubuntu-Medium.ttf"/>
+      <file href="brand/fonts/Ubuntu-Regular.ttf"/>
       <file href="captions/smp152-v01-hook.ar.vtt"/>
       <file href="captions/smp152-v01-hook.en.vtt"/>
       <file href="captions/smp152-v02-scene1-poor.ar.vtt"/>
@@ -118,7 +118,7 @@
       <file href="video/smp152-v06-scene3-poor.mp4"/>
       <file href="video/smp152-v07-scene3-good.mp4"/>
       <file href="video/smp152-v08-story-start.mp4"/>
-      <file href="aids/smp152-info-point-lost-found-job-aids.pdf"/>
+      <file href="aids/SMP15.2-Info-Point-Lost-and-Found-Restricted-Items-Storage-and-Children-s-Registration-job-aids.pdf"/>
     </resource>
   </resources>
 </manifest>
